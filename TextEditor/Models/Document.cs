@@ -1,4 +1,8 @@
-﻿namespace TextEditor.Models
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace TextEditor.Models
 {
     public class Document
     {
@@ -8,7 +12,9 @@
         public string Content { get; set; }
 
         // This section for connecting Document to an User
-        public int UserId { get; set; }
-        public string UserName { get; set; }
+        [Required]
+        public string? UserId { get; set; }
+        [ForeignKey("UserId")]
+        public IdentityUser? User { get; set; }
     }
 }
