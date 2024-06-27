@@ -37,6 +37,25 @@ namespace TextEditor.Controllers
             return View();
         }
 
+        // GET: Documents/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var document = await _context.Docs
+                .Include(d => d.User)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (document == null)
+            {
+                return NotFound();
+            }
+
+            return View(document);
+        }
+
         // POST: Documents/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
