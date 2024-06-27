@@ -12,6 +12,8 @@ using TextEditor.Models;
 
 namespace TextEditor.Controllers
 {
+    // Getting User ID of currrently logged in user
+    // User.FindFirstValue(ClaimTypes.NameIdentifier);
 
     // Putting [Authorize] only allows autheticated users to view this page
     [Authorize]
@@ -27,8 +29,10 @@ namespace TextEditor.Controllers
         // GET: Documents
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Docs.Include(d => d.User);
-            return View(await applicationDbContext.ToListAsync());
+            var applicationDbContext = from c in _context.Docs
+                                       select c;
+            applicationDbContext = applicationDbContext.Where(u => u.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier));
+            return View(await applicationDbContext.Include(d => d.User).ToListAsync());
         }
 
         // GET: Documents/Create
